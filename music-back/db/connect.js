@@ -1,14 +1,13 @@
-const mongoose = require('mongoose');
+import { connect } from 'mongoose';
 
 const connectDB = (url) => {
-  mongoose
-    .connect(url)
-    .then(() => {
-      console.log('DB connected...');
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    connect(url)
+        .then(() => {
+            console.log('DB connected...');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-module.exports = connectDB;
+export default connectDB;

@@ -1,11 +1,11 @@
-const { StatusCodes } = require('http-status-codes');
-const CustomApiError = require('./CustomApiError');
+import { StatusCodes } from 'http-status-codes';
+import CustomApiError from './CustomApiError.js';
 
 class UnauthorizedError extends CustomApiError {
-  constructor(message) {
-    super(message);
-    this.statusCode = StatusCodes.UNAUTHORIZED;
-  }
+    constructor(message) {
+        super(message);
+        this.statusCode = StatusCodes.UNAUTHORIZED;
+    }
 }
 
-module.exports = UnauthorizedError;
+export default UnauthorizedError;

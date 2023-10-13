@@ -1,8 +1,8 @@
 //env variables
-require('dotenv').config();
-require('express-async-errors');
+import 'dotenv/config'
+import 'express-async-errors';
 //express
-const express = require('express');
+import express from 'express';
 const app = express();
 app.use(express.json());
 
@@ -10,7 +10,13 @@ app.use(express.json());
 // const { authoriseUser } = require('./middleware/Authorization');
 
 // const helmet = require('helmet');
-// const cors = require('cors');
+// import corsOptions from './config/corsOptions';
+
+//cors
+import cors from 'cors'
+import corsOptions from "./config/corsOptions.js";
+app.use(cors(corsOptions));
+
 // const xss = require('xss-clean');
 // const fileUpload = require('express-fileupload');
 // const rateLimiter = require('express-rate-limit');
@@ -31,38 +37,37 @@ app.use(express.json());
 // );
 
 //cookie-parser
-const cookieParser = require('cookie-parser');
+import cookieParser from 'cookie-parser';
 app.use(cookieParser(process.env.JWT_SECRET));
 
 //routes
-const userRouter = require('./routes/user');
-const authRouter = require('./routes/auth');
-const songsRouter = require('./routes/songs');
-
+import authRouter from './routes/auth.js';
+import songsRouter from './routes/songs.js';
 app.use('/api/v1/auth/', authRouter);
-app.use('/api/v1/user/', userRouter);
 app.use('/api/v1/songs/', songsRouter);
 
+import userRouter from './routes/user.js';
+app.use('/api/v1/user/', userRouter);
 //middlewares
-const ErrorHandlerMiddleware = require('./middleware/ErrorHandler');
-const NotFoundMiddleware = require('./middleware/NotFound');
+import ErrorHandlerMiddleware from './middleware/ErrorHandler.js';
+import NotFoundMiddleware from './middleware/NotFound.js';
 
 app.use(NotFoundMiddleware);
 app.use(ErrorHandlerMiddleware);
 
 //start
-const connectDB = require('./db/connect');
+import connectDB from './db/connect.js';
 
 const port = process.env.PORT || 5000;
 
 const start = async () => {
-  try {
-    app.listen(port, () => {
-      console.log(`Server listening on port ${port}`);
-    });
-    connectDB(process.env.MONGO_URI);
-  } catch (err) {
-    console.log(err);
-  }
+    try {
+        app.listen(port, () => {
+            console.log(`Server listening on port ${port}`);
+        });
+        connectDB(process.env.MONGO_URI);
+    } catch (err) {
+        console.log(err);
+    }
 };
 start();

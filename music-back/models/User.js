@@ -1,52 +1,55 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import { Schema, model } from 'mongoose';
+import validator from 'validator';
+import bcryptjs from 'bcryptjs';
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please provide name'],
-    maxlength: 20,
-  },
-  email: {
-    type: String,
-    // match: [
-    //   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    // ],
-    validate: {
-      validator: validator.isEmail,
-      message: 'Please provide valid email',
+const UserSchema = new Schema({
+    user_name: {
+        type: String,
+        required: [true, 'Please provide name'],
+        maxlength: 20,
     },
-    required: [true, 'Please provide email'],
-    maxlength: 20,
-    unique: [true, 'Please provide unique email'],
-  },
-  password: {
-    type: String,
-    required: [true, 'Please provide password'],
-    // maxlength: 20,
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
-  },
-  // verificationToken: String,
-  passwordToken: {
-    type: String,
-  },
-  passwordTokenExpirationDate: {
-    type: Date,
-  },
+    user_email: {
+        type: String,
+        // match: [
+        //   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        // ],
+        validate: {
+            validator: validator.isEmail,
+            message: 'Please provide valid email',
+        },
+        required: [true, 'Please provide email'],
+        maxlength: 20,
+        unique: [true, 'Please provide unique email'],
+    },
+    user_password: {
+        type: String,
+        required: [true, 'Please provide password'],
+        // maxlength: 20,
+    },
+    user_roles: {
+        User: {
+            type: String,
+            default: 'user'
+        },
+        Admin: String
+    },
+    // verificationToken: String,
+    user_passwordToken: {
+        type: String,
+    },
+    user_refreshToken: {
+        type: String,
+    },
+    // passwordTokenExpirationDate: {
+    //     type: Date,
+    // },
 });
 
-UserSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
+// UserSchema.pre('save', async function() {
+//     if (!this.isModified('password')) return;
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+// });
 
 // UserSchema.methods.createJWT = function () {
 //   return jwt.sign(
@@ -58,9 +61,9 @@ UserSchema.pre('save', async function () {
 //   );
 // };
 
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-  const isMatch = await bcrypt.compare(candidatePassword, this.password);
-  return isMatch;
+UserSchema.methods.comparePassword = async function(candidatePassword) {
+    const isMatch = await bcryptjs.compare(candidatePassword, this.password);
+    return isMatch;
 };
 
-module.exports = mongoose.model('User', UserSchema);
+export default model('User', UserSchema);

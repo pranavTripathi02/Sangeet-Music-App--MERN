@@ -1,46 +1,47 @@
 // const { StatusCodes } = require('http-status-codes');
 // const jwt = require('jsonwebtoken');
-const customError = require('../error');
-const Token = require('../models/Token');
-const { isTokenValid, attachCookies } = require('../utils/jwt');
+import { UnauthorizedError } from '../error/index.js';
+import User from '../models/User.js';
+import { isTokenValid, attachCookies } from '../utils/jwt.js';
 
 const authoriseUser = async (req, res, next) => {
-  const { refreshToken, accessToken } = req.signedCookies;
+    const { refreshToken, accessToken } = req.signedCookies;
+    // console.log("here, aT", refreshToken, accessToken)
 
-  try {
-    if (accessToken) {
-      const payload = isTokenValid(accessToken);
-      req.user = payload.user;
-      return next();
-    }
-    const payload = isTokenValid(refreshToken);
-    const existingToken = await Token.findOne({
-      user: payload.user.userID,
-      refreshToken: payload.refreshToken,
-    });
-    if (!existingToken || !existingToken?.isValid) {
-      throw new customError.UnauthorizedError('Authentication Invalid');
-    }
-    attachCookies({
-      res,
-      user: payload.user,
-      refreshToken: existingToken.refreshToken,
-    });
+    try {
+        if (accessToken) {
+            const payload = isTokenValid(accessToken);
+            req.user = payload.user;
+            return next();
+        }
+        const payload = isTokenValid(refreshToken);
+        console.log("isTokenValid", payload);
+        const refreshCheck = await User.findOne({
+            user_refreshToken: payload.refreshToken,
+        });
+        if (!refreshCheck) {
+            throw new UnauthorizedError('Authentication Invalid');
+        }
+        attachCookies({
+            res,
+            user: payload.user,
+        });
 
-    req.user = payload.user;
-    next();
-  } catch (error) {
-    throw new customError.UnauthorizedError('Authentication Invalid');
-  }
+        req.user = payload.user;
+
+        next();
+    } catch (error) {
+        throw new UnauthorizedError('Authentication Invalid');
+    }
 };
 
 const authoriseRoles = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      throw new customError.UnauthorizedError('Not authorized to access');
-    }
-    next();
-  };
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            throw new UnauthorizedError('Not authorized to access');
+        }
+        next();
+    };
 };
 
-module.exports = { authoriseUser, authoriseRoles };
+export { authoriseUser, authoriseRoles };

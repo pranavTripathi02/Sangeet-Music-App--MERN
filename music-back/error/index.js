@@ -1,11 +1,11 @@
-const CustomApiError = require('./CustomApiError');
-const BadRequestError = require('./BadRequest');
-const NotFoundError = require('./Not-Found');
-const UnauthorizedError = require('./Unauthorized');
+import CustomApiError from './CustomApiError.js';
+import BadRequestError from './BadRequest.js';
+import NotFoundError from './Not-Found.js';
+import UnauthorizedError from './Unauthorized.js';
 
-module.exports = {
-  CustomApiError,
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
+export {
+    CustomApiError,
+    BadRequestError,
+    NotFoundError,
+    UnauthorizedError,
 };

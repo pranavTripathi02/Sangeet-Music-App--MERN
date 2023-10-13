@@ -1,19 +1,19 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
-  getAllUsers,
-  getCurrentUser,
-  updatePassword,
-} = require('../controllers/user');
-const {
-  authoriseUser,
-  authoriseRoles,
-} = require('../middleware/Authorization');
+import {
+    getAllUsers,
+    getCurrentUser,
+    updatePassword,
+} from '../controllers/user.js';
+import {
+    authoriseUser,
+    authoriseRoles,
+} from '../middleware/Authorization.js'
 
-router.route('/all').get(authoriseUser, authoriseRoles('admin'), getAllUsers);
+router.route('/').get(authoriseUser, authoriseRoles('admin'), getAllUsers);
 router
-  .route('/me')
-  .get(authoriseUser, getCurrentUser)
-  .patch(authoriseUser, updatePassword);
+    .route('/me')
+    .get(authoriseUser, getCurrentUser)
+    .patch(authoriseUser, updatePassword);
 
-module.exports = router;
+export default router;
