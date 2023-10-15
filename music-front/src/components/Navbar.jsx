@@ -1,10 +1,12 @@
 import React from 'react';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 import { Link } from 'react-router-dom';
 import LogoutBtn from './LogoutBtn'
+import { useAuth } from '../hooks';
 
 export default function Navbar() {
-    const { user } = useGlobalContext();
+    // const { user } = useGlobalContext();
+    const { auth } = useAuth();
 
     return (
         <>
@@ -19,14 +21,14 @@ export default function Navbar() {
                         alt='logo'
                     />
                 </Link>
-                {user && (
+                {auth && (
                     <div className='flex justify-between'>
-                        <span className=''>{user.name}</span>
+                        <span className=''>{auth.user?.user_name}</span>
                         <LogoutBtn />
                     </div>
                 )}
             </nav>
-            {user && (
+            {auth && (
                 <div className='row'>
                     <nav className='col-md-2 col-lg-2 d-none d-md-block bg-dark sidebar'>
                         <div className='sidebar-sticky'>
@@ -46,7 +48,7 @@ export default function Navbar() {
                                         <span>My account</span>
                                     </Link>
                                 </li>
-                                {user.role === 'admin' && (
+                                {auth?.user?.user_roles === 'admin' && (
                                     <>
                                         <li className='nav-item'>
                                             <Link to='/users/all' className='nav-link'>

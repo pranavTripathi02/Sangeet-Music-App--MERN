@@ -1,3 +1,6 @@
+import { useLogout } from "../hooks"
+
 export default function LogoutBtn() {
-    return <div>logout</div>
+    const logout = useLogout();
+    return <button onClick={() => logout()}>logout</button>
 }

@@ -1,11 +1,13 @@
 // import axios from 'axios';
 import React, { useState } from 'react';
+import { useAuth } from '../hooks';
 // import styled from 'styled-components';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 
 export default function MyAccount() {
-    const { user } = useGlobalContext();
-    const [users, setUsers] = useState([]);
+    // const { user } = useGlobalContext();
+    // const [users, setUsers] = useState([]);
+    const { auth } = useAuth();
 
     // const allUsers = async () => {
     //   const { data } = await axios.get('/api/v1/user/all');
@@ -25,13 +27,13 @@ export default function MyAccount() {
                     <h3>Your Account</h3>
                     <div className='border py-2 my-3'>
                         <p>
-                            Name: <span>{user.name}</span>
+                            Name: <span>{auth.user_name}</span>
                         </p>
                         <p>
-                            UserID: <span>{user.userID}</span>
+                            UserID: <span>{auth.user_userID}</span>
                         </p>
                         <p>
-                            Role: <span>{user.role}</span>
+                            Role: <span>{auth.user_roles}</span>
                         </p>
                     </div>
                 </div>

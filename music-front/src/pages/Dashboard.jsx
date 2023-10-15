@@ -1,25 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks';
 // import styled from 'styled-components';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 
 function Dashboard() {
-    const { user } = useGlobalContext();
-    const { name, userID, role } = user;
+    // const { user } = useGlobalContext();
     // console.log('from dashboard global user: ', user);
+    const { auth } = useAuth();
+    const { user_name, user_userID, user_roles } = auth.user;
 
     return (
         <>
             <div role='main'>
                 <div className='text-color-success text-capitalize'>
                     <h2>
-                        hello there <span>{name}</span>
+                        hello there <span>{user_name}</span>
                     </h2>
                     <p>
-                        Your ID: <span>{userID}</span>
+                        Your ID: <span>{user_userID}</span>
                     </p>
                     <p>
-                        Your role: <span>{role}</span>
+                        Your role: <span>{user_roles}</span>
                     </p>
                 </div>
                 <div className='p-5'>

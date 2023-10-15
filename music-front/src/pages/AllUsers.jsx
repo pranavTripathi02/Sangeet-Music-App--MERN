@@ -1,10 +1,12 @@
 import axios from '../api/axios';
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../hooks';
 // import styled from 'styled-components';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 
 export default function AllUsers() {
-    const { user } = useGlobalContext();
+    // const { user } = useGlobalContext();
+    const { auth } = useAuth();
     const [users, setUsers] = useState([]);
 
     const allUsers = async () => {
@@ -15,29 +17,29 @@ export default function AllUsers() {
     // if (user.role === 'admin') {
     useEffect(() => {
         allUsers();
-    }, [user.role]);
+    }, [auth.user.user_roles]);
     // }
 
     return (
         <>
             <div>
-                {user.role === 'admin' && (
+                {auth.user.user_roles[0] === 'admin' && (
                     <div>
                         <h3>All Users</h3>
                         {users.map((user) => {
                             return (
                                 <div className='border py-2 my-3' key={user._id}>
                                     <p>
-                                        Name: <span>{user.name}</span>
+                                        Name: <span>{auth.user.user_name}</span>
                                     </p>
                                     <p>
-                                        UserID: <span>{user._id}</span>
+                                        UserID: <span>{auth.user.user_id}</span>
                                     </p>
                                     <p>
-                                        Email: <span>{user.email}</span>
+                                        Email: <span>{auth.user.user_email}</span>
                                     </p>
                                     <p>
-                                        Role: <span>{user.role}</span>
+                                        Role: <span>{auth.user.user_role}</span>
                                     </p>
                                 </div>
                             );

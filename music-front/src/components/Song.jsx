@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import styled from 'styled-components';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 
 export default class Song extends Component {
     render() {

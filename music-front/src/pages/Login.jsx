@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import FormRow from '../components/FormRow';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import axios from '../api/axios';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 import useLocalState from '../utils/localState';
+import { useAuth } from '../hooks';
 
 export default function Login() {
-    const { user, saveUser, navigate } = useGlobalContext();
-    // const navigate = useNavigate();
+    // const { user, saveUser, navigate } = useGlobalContext();
+    const { auth, setAuth } = useAuth();
+    const navigate = useNavigate();
     const [values, setValues] = useState({ email: '', password: '' });
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -29,21 +31,22 @@ export default function Login() {
                 type: 'success',
             });
             setLoading(false);
-            saveUser(data.user);
-            // navigate('/dashboard');
+            console.log(data);
+            setAuth(data);
+            navigate('/dashboard');
         } catch (err) {
             console.log('err is: ', err);
             showAlert({ text: err.response.data.message });
             setLoading(false);
         }
     };
-    console.log('alert: ', alert);
+    // console.log('alert: ', alert);
     return (
         <>
             {alert.show && (
                 <div className={`alert alert-${alert.type}`}>{alert.text}</div>
             )}
-            {user && <Navigate to='/dashboard' />}
+            {auth?.user && <Navigate to='/dashboard' />}
             <div className='container-sm shadow my-5 border rounded p-5'>
                 <h3 className='text-center'>Login</h3>
                 <form

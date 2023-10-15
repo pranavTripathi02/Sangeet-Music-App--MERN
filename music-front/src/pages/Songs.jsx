@@ -1,12 +1,14 @@
 import axios from '../api/axios';
 import React, { useEffect, useState } from 'react';
-import { useGlobalContext } from '../context';
+// import { useGlobalContext } from '../context';
 import Song from '../components/Song';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import { useAuth } from '../hooks';
 
 export default function Songs() {
-    const { user } = useGlobalContext();
+    // const { user } = useGlobalContext();
+    const { auth } = useAuth();
     const [songs, setSongs] = useState([]);
     const [songUrl, setSongUrl] = useState('');
     useEffect(async () => {
