@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema({
     user_name: {
@@ -62,7 +62,7 @@ const UserSchema = new Schema({
 // };
 
 UserSchema.methods.comparePassword = async function(candidatePassword) {
-    const isMatch = await bcryptjs.compare(candidatePassword, this.password);
+    const isMatch = await bcrypt.compare(candidatePassword, this.user_password);
     return isMatch;
 };
 

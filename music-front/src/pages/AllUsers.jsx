@@ -1,4 +1,4 @@
-import axios from '../api/axios';
+import axios, { axiosPrivate } from '../api/axios';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks';
 // import styled from 'styled-components';
@@ -10,20 +10,33 @@ export default function AllUsers() {
     const [users, setUsers] = useState([]);
 
     const allUsers = async () => {
-        const { data } = await axios.get('/user/all');
-        setUsers(data.users);
+        try {
+            const { data } = await axiosPrivate.get('/user',
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${auth?.accessToken}`
+                    },
+                }
+            );
+            console.log(data);
+            setUsers(data.users);
+        }
+        catch (err) {
+            console.error("error occurred");
+        }
     };
 
     // if (user.role === 'admin') {
     useEffect(() => {
         allUsers();
-    }, [auth.user.user_roles]);
+    }, []);
     // }
 
     return (
         <>
             <div>
-                {auth.user.user_roles[0] === 'admin' && (
+                {auth.user?.user_roles?.includes('Admin') && (
                     <div>
                         <h3>All Users</h3>
                         {users.map((user) => {

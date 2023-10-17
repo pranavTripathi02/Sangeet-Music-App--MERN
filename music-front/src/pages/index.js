@@ -1,4 +1,5 @@
 import Home from './Home';
+import Dashboard from './Dashboard'
 import Login from './Login';
 import Register from './Register';
 import Songs from './Songs';
@@ -7,6 +8,7 @@ import MyAccount from './MyAccount';
 import AddSong from './AddSong';
 import Artists from './Artists';
 import DeleteSong from './DeleteSong';
+import UiRouter from './UiRouter';
 
 export {
     Home,
@@ -18,4 +20,6 @@ export {
     AddSong,
     DeleteSong,
     Artists,
+    Dashboard,
+    UiRouter
 };

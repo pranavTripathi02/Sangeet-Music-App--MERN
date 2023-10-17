@@ -2,7 +2,7 @@
   "name": "music-front",
   "version": "0.1.0",
   "private": true,
-  "type":"module",
+  "type": "module",
   "devDependencies": {
     "@vitejs/plugin-react-swc": "^3.4.0",
     "autoprefixer": "^10.4.16",
@@ -12,14 +12,19 @@
     "vite": "^4.4.11"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-regular-svg-icons": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.5.1",
+    "howler": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-h5-audio-player": "^3.8.4",
     "react-router-dom": "^6.16.0"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build"
   }
 }

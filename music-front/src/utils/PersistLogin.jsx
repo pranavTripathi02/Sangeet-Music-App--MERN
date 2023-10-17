@@ -3,7 +3,7 @@ import { useAuth, useLogout, useRefreshToken } from "../hooks/index.js";
 import { Outlet } from "react-router-dom";
 
 export default function PersistLogin() {
-    const [isLoading, setIsLoading] = useState < boolean > (true);
+    const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
     const { auth, persist } = useAuth();
     const logout = useLogout();
@@ -12,6 +12,7 @@ export default function PersistLogin() {
         setIsLoading(true);
         try {
             await refresh();
+            // console.log(accToken, auth);
         }
         catch (err) {
             console.error(err);
@@ -19,7 +20,10 @@ export default function PersistLogin() {
         setIsLoading(false);
     }
 
+    // console.log(auth);
+
     useEffect(() => {
+        // console.log("hi", !auth.accessToken);
         !auth?.accessToken
             ? persist
                 ? verifyRefreshToken()
@@ -30,11 +34,10 @@ export default function PersistLogin() {
     //     console.log("here", auth);
     // }, [isLoading])
 
-    return <>{!persist
+    return !persist
         ? <Outlet />
         : isLoading
             ? <div>Loading</div>
             : <Outlet />
-    }</>
 }
 

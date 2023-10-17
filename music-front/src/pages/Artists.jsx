@@ -1,83 +1,82 @@
-import axios from '../api/axios';
 import React, { useEffect, useState } from 'react';
 // import { useGlobalContext } from '../context';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import Song from '../components/Song';
+import Card from '../components/Card';
+import useMusic from '../hooks/useMusic';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLongArrowLeft } from '@fortawesome/free-solid-svg-icons';
+// import { Link } from 'react-router-dom';
 
 export default function Artists() {
     // const { user } = useGlobalContext();
-    const [songs, setSongs] = useState([]);
     const [artistName, setArtistName] = useState('');
-    const [newSongs, setNewSongs] = useState([]);
-    const [songUrl, setSongUrl] = useState('');
-    useEffect(async () => {
-        const { data } = await axios.get('/songs/artists');
-        setSongs(data.songs);
-        setNewSongs(songs.filter((song) => song.artist === artistName));
-    }, [artistName, songUrl]);
-    const artists = [...new Set(songs.map((song) => song.artist))];
-    // console.log('artists', artists);
-    if (artistName.length === 0) {
-        return (
-            <div className='songs'>
-                <h3>Artists</h3>
-                <div className='ms-3 list-group mb-5'>
-                    {artists.map((song, index) => {
+    const [artistSongs, setArtistSongs] = useState([]);
+    // const [songUrl, setSongUrl] = useState('');
+
+    const { songs, artists } = useMusic();
+    // console.log(artists);
+    //
+    // const handlePlay = (song) => {
+    //     // console.log(song);
+    // }
+
+    useEffect(() => {
+        const newList = songs.filter((song) => song.artist === artistName)
+        setArtistSongs(newList);
+    }, [artistName])
+
+    console.log('artistName', artistName);
+
+
+    return <> {
+        artistName?.length < 1
+            ? < div >
+                <h2>Artists</h2>
+                <div className='flex space-x-5'>
+                    {artists.map((artist, idx) => {
                         return (
-                            <button
-                                className='list-group-item list-group-item-action'
-                                // style={{ width: '100%' }}
-                                key={index}
-                                onClick={() => {
-                                    setArtistName(song);
-                                }}
+                            <div
+                                className='text-center cursor-pointer bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text duration-100 hover:text-transparent'
+                                key={idx}
+                                onClick={() => setArtistName(artist)}
                             >
-                                <p className='button-text text-capitalize fs-5'>{song}</p>
-                                {/* <img src={song.artist_img} className='card-img-top' /> */}
-                            </button>
+                                <h5>
+                                    {artist}
+                                </h5>
+                            </div>
+
                         );
                     })}
                 </div>
-            </div>
-        );
-    } else {
-        // console.log('newsongs', newSongs);
-        console.log(songUrl);
-        return (
-            <>
+            </div >
+            : <div className='flex flex-col'>
+                <div
+                    className='my-5 sm:ms-0 ms-5 hover:text-[var(--text-accent)]'
+                    onClick={() => setArtistName('')}
+                >
+                    <FontAwesomeIcon icon={faLongArrowLeft} />
+                    <button className='mx-2'>
+                        Go back
+                    </button>
+                </div>
                 <div className='songs mb-5'>
-                    <h3>Songs by {artistName}</h3>
-                    <div>
-                        {newSongs.map((song) => {
+                    <h2>Songs by {artistName}</h2>
+                    <div className='flex space-x-5 h-full'>
+                        {artistSongs.map((song) => {
                             return (
                                 <div
-                                    className='d-inline-flex'
+                                    className=''
                                     key={song._id}
-                                    onClick={() => setSongUrl(song.song_url)}
+                                    onClick={() => handlePlay(song)}
                                 >
-                                    <Song song={song} />
+                                    <Card info={song} />
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-                {/* {songUrl && <Play url={songUrl} />} */}
-                {songUrl && (
-                    <AudioPlayer
-                        autoPlay
-                        src={songUrl}
-                        onPlay={(e) => console.log('onPlay')}
-                        style={{
-                            width: '80%',
-                            border: 'none',
-                            position: 'fixed',
-                            bottom: 0,
-                        }}
-                    />
-                )}
-            </>
-        );
+            </div>
     }
-    // } else return <Song artistName={artistName} />;
+    </>
 }

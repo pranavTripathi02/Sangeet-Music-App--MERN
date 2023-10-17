@@ -7,13 +7,15 @@ import {
 } from '../controllers/user.js';
 import {
     authoriseUser,
-    authoriseRoles,
+    // authoriseRoles,
 } from '../middleware/Authorization.js'
+import handleRefreshToken from '../controllers/HandleRefreshToken.js';
 
-router.route('/').get(authoriseUser, authoriseRoles('admin'), getAllUsers);
+router.route('/').get(authoriseUser, getAllUsers);
 router
     .route('/me')
     .get(authoriseUser, getCurrentUser)
     .patch(authoriseUser, updatePassword);
+router.route('/refresh').get(handleRefreshToken);
 
 export default router;

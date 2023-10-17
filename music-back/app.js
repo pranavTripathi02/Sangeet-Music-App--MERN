@@ -17,6 +17,8 @@ import cors from 'cors'
 import corsOptions from "./config/corsOptions.js";
 app.use(cors(corsOptions));
 
+// app.set("trust proxy", 1); // X-domain queries?
+
 // const xss = require('xss-clean');
 // const fileUpload = require('express-fileupload');
 // const rateLimiter = require('express-rate-limit');

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Tajawal:700|Tajawal:400');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,13 +17,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+    text-transform: capitalize;
 
     --text: #f7fff0;
     --background: #050a00;
     --primary: #4c0495;
     --secondary: #410241;
-    --accent: #1515f9;
-
+    --accent: #5555f9;
+    --text-accent: #7777fc;
+    /* --text-accent: #7cbbb2; */
 }
 
 :root[data-theme="light"] {
@@ -38,13 +41,37 @@ body {
     color: var(--text);
 }
 
+/* body { */
+/*     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', */
+/*     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', */
+/*     sans-serif; */
+/* } */
+
+/* code { */
+/*     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', */
+/*     monospace; */
+/* } */
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Tajawal';
+  font-weight: 400;
 }
 
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1, h2, h3, h4, h5 {
+  font-family: 'Tajawal';
+  font-weight: 700;
 }
+
+html {font-size: 100%;} /* 16px */
+
+h1 {font-size: 4.210rem; /* 67.36px */}
+
+h2 {font-size: 3.158rem; /* 50.56px */}
+
+h3 {font-size: 2.369rem; /* 37.92px */}
+
+h4 {font-size: 1.777rem; /* 28.48px */}
+
+h5 {font-size: 1.333rem; /* 21.28px */}
+
+small {font-size: 0.750rem; /* 12px */}

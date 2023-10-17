@@ -13,26 +13,50 @@ const isTokenValid = (token) => jwt.verify(token, process.env.JWT_SECRET, (err, 
     return decoded;
 });
 
-const attachCookies = ({ res, user }) => {
-    const accessTokenJWT = createJWT({ payload: { user } });
-    const refreshTokenJWT = createJWT({ payload: { user } });
+// const attachCookies = ({ res, user, refreshToken }) => {
+//     const accessTokenJWT = createJWT({ payload: { user } });
+//     const refreshTokenJWT = createJWT({ payload: { user, refreshToken } });
+//
+//     const oneDay = 1000 * 60 * 60 * 24;
+//
+//     res
+//         .cookie('accessToken', accessTokenJWT, {
+//             httpOnly: true,
+//             // secure: process.env.NODE_ENV === 'production',
+//             signed: true,
+//             expires: new Date(Date.now() + oneDay),
+//         })
+//         .cookie('refreshToken', refreshTokenJWT, {
+//             httpOnly: true,
+//             // secure: process.env.NODE_ENV === 'production',
+//             signed: true,
+//             expires: new Date(Date.now() + oneDay * 30),
+//         });
+//
+//     return { accessTokenJWT, refreshTokenJWT };
+// };
 
-    const oneDay = 1000 * 60 * 60 * 24;
+const attachCookies = ({ res, user, refreshToken }) => {
+    const accessTokenJWT = createJWT({ payload: { user } });
+    // //console.log(accessTokenJWT);
+    const refreshTokenJWT = createJWT({ payload: { user, refreshToken } });
+    const day = 1000 * 60 * 60 * 24;
+
+    // console.log("attach cookies");
 
     res
         .cookie('accessToken', accessTokenJWT, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
             signed: true,
-            expires: new Date(Date.now() + oneDay),
+            expires: new Date(Date.now() + 1 * day),
         })
         .cookie('refreshToken', refreshTokenJWT, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
             signed: true,
-            expires: new Date(Date.now() + oneDay * 30),
+            expires: new Date(Date.now() + 30 * day),
         });
-    return { refreshTokenJWT };
+    return { accessTokenJWT, refreshTokenJWT };
 };
 
-export { createJWT, attachCookies, isTokenValid };
+
+export { attachCookies, isTokenValid };

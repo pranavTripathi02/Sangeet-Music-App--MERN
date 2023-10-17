@@ -3,78 +3,46 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LogoutBtn from './LogoutBtn'
 import { useAuth } from '../hooks';
+import useComp from '../hooks/useComp';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeadphonesAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
     // const { user } = useGlobalContext();
     const { auth } = useAuth();
+    const { sidebarOpen, setSidebarOpen } = useComp();
 
     return (
         <>
             <nav
                 className='flex border-b-2 border-[var(--secondary)] 
-        justify-between items-center h-16'
+        justify-between items-center h-16 mx-5'
             >
-                <Link to='/' className='border-2'>
-                    <img
-                        className='logo'
-                        src=""
-                        alt='logo'
-                    />
-                </Link>
-                {auth && (
-                    <div className='flex justify-between'>
-                        <span className=''>{auth.user?.user_name}</span>
-                        <LogoutBtn />
-                    </div>
-                )}
-            </nav>
-            {auth && (
-                <div className='row'>
-                    <nav className='col-md-2 col-lg-2 d-none d-md-block bg-dark sidebar'>
-                        <div className='sidebar-sticky'>
-                            <ul className='nav flex-column'>
-                                <li className='nav-item'>
-                                    <Link to='/dashboard/songs' className='nav-link'>
-                                        <span>Songs</span>
-                                    </Link>
-                                </li>
-                                <li className='nav-item'>
-                                    <Link to='/dashboard/songs/artists' className='nav-link'>
-                                        <span>Artists</span>
-                                    </Link>
-                                </li>
-                                <li className='nav-item'>
-                                    <Link to='/users/me' className='nav-link'>
-                                        <span>My account</span>
-                                    </Link>
-                                </li>
-                                {auth?.user?.user_roles === 'admin' && (
-                                    <>
-                                        <li className='nav-item'>
-                                            <Link to='/users/all' className='nav-link'>
-                                                <span className='text-danger'>All Users</span>
-                                            </Link>
-                                        </li>
-                                        <li className='nav-item'>
-                                            <Link to='/dashboard/songs/addsong/' className='nav-link'>
-                                                <span className='text-danger'>Add Song</span>
-                                            </Link>
-                                        </li>
-                                        <li className='nav-item'>
-                                            <Link
-                                                to='/dashboard/songs/deletesong/'
-                                                className='nav-link'
-                                            >
-                                                <span className='text-danger'>Delete Song</span>
-                                            </Link>
-                                        </li>
-                                    </>
-                                )}
-                            </ul>
-                        </div>
-                    </nav>
+                <div>
+                    <button
+                        className='hover:text-[var(--primary)]'
+                        onClick={() => setSidebarOpen(!sidebarOpen)}>
+                        <FontAwesomeIcon
+                            size='xl'
+                            icon={faHeadphonesAlt}
+                        />
+                    </button>
                 </div>
-            )}
+                {auth?.user
+                    ? (
+                        <div className='flex justify-between items-center'>
+                            <Link
+                                className='mx-5 hover:text-[var(--text-accent)] cursor-pointer'
+                                to='/users/me'
+                            >
+                                {auth.user?.user_name}</Link>
+                            <LogoutBtn />
+                        </div>
+                    )
+                    : (
+                        <LogoutBtn />
+                    )}
+            </nav >
         </>
     );
 }

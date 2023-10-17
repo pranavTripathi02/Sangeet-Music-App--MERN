@@ -30,8 +30,10 @@ const ProtectedRoute = ({ allowedRoles }) => {
     // const handleClick = () => {
     //   return <Navigate to='/login' state={{ from: location }} replace />;
     // };
-    return auth?.user?.user_roles?.find((role) =>
-        allowedRoles?.includes(role)
+    // console.log(auth?.user);
+    // console.log(auth?.user?.user_roles?.find((role) => allowedRoles.includes(role)), allowedRoles);
+
+    return auth?.user?.user_roles?.find((role) => allowedRoles?.includes(role)
     ) ? (
         <Outlet />
     ) : (

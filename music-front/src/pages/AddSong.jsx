@@ -1,7 +1,6 @@
 import axios from '../api/axios';
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import FormRow from '../components/FormRow';
 import useLocalState from '../utils/localState';
 
 export default function AddSong() {
@@ -30,9 +29,9 @@ export default function AddSong() {
         });
         console.log('song:', song);
         try {
-            const { data } = await axios.post('/songs/', song);
+            const { data } = await axios.post('/songs/', song, { withCredentials: true });
             showAlert({ text: `Song ${song.title} added`, type: 'success' });
-            // console.log(data);
+            console.log(data);
         } catch (err) {
             showAlert({
                 text: err.response.data.message || `Please try again`,
@@ -54,34 +53,34 @@ export default function AddSong() {
                 </p>
                 <form action='' className='form' onSubmit={handleSubmit}>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='title'
                             type='title'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.title}
                         />
                     </div>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='artist'
                             type='artist'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.artist}
                         />
                     </div>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='song_url'
                             type='song_url'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.song_url}
                         />
                     </div>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='artist_img'
                             type='artist_img'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.artist_img}
                         />
                     </div>

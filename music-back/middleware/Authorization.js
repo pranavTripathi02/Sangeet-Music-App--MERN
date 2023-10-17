@@ -1,43 +1,39 @@
 // const { StatusCodes } = require('http-status-codes');
-// const jwt = require('jsonwebtoken');
-import { UnauthorizedError } from '../error/index.js';
-import User from '../models/User.js';
-import { isTokenValid, attachCookies } from '../utils/jwt.js';
+import { CustomApiError, UnauthorizedError } from '../error/index.js';
+// import User from '../models/User.js';
+import { isTokenValid } from '../utils/jwt.js';
+// import 'dotenv/config';
 
 const authoriseUser = async (req, res, next) => {
-    const { refreshToken, accessToken } = req.signedCookies;
-    // console.log("here, aT", refreshToken, accessToken)
+    // console.log("here, authoriseUser")
+    const authHeader = req.headers.authorization;
+
+    // console.log("req.user", req);
+    // console.log("req.user", req.user);
+    // console.log("req.headers", req.headers);
+
+    if (!authHeader || !authHeader?.startsWith("Bearer "))
+        throw new CustomApiError("Missing token", 401);
+
 
     try {
-        if (accessToken) {
-            const payload = isTokenValid(accessToken);
-            req.user = payload.user;
+        const token = authHeader.split(' ')[1];
+        const decodedAccess = isTokenValid(token);
+        // req.user = payload.user;
+        if (decodedAccess)
             return next();
-        }
-        const payload = isTokenValid(refreshToken);
-        console.log("isTokenValid", payload);
-        const refreshCheck = await User.findOne({
-            user_refreshToken: payload.refreshToken,
-        });
-        if (!refreshCheck) {
-            throw new UnauthorizedError('Authentication Invalid');
-        }
-        attachCookies({
-            res,
-            user: payload.user,
-        });
 
-        req.user = payload.user;
-
-        next();
     } catch (error) {
         throw new UnauthorizedError('Authentication Invalid');
     }
 };
 
-const authoriseRoles = (...roles) => {
+const authoriseRoles = ({ role }) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        // console.log("here,", role);
+        console.log(req?.user?.user_roles)
+        // console.log(req);
+        if (!req.user?.user_roles?.includes(role)) {
             throw new UnauthorizedError('Not authorized to access');
         }
         next();

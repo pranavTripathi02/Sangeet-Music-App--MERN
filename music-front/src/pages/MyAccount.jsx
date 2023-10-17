@@ -24,16 +24,21 @@ export default function MyAccount() {
         <>
             <div>
                 <div>
-                    <h3>Your Account</h3>
-                    <div className='border py-2 my-3'>
+                    <h2>Your Account</h2>
+                    <div className='py-2 my-3 flex flex-col justify-between'>
                         <p>
-                            Name: <span>{auth.user_name}</span>
+                            Name: <span>{auth.user.user_name}</span>
                         </p>
                         <p>
-                            UserID: <span>{auth.user_userID}</span>
+                            UserID: <span>{auth.user.user_id}</span>
                         </p>
                         <p>
-                            Role: <span>{auth.user_roles}</span>
+                            Roles: <span> [
+                                {auth.user.user_roles.map((item, idx) =>
+                                    idx + 1 < auth.user.user_roles.length
+                                        ? item + ', '
+                                        : item)}
+                                ] </span>
                         </p>
                     </div>
                 </div>

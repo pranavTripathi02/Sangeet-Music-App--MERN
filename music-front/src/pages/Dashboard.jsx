@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks';
+import { Link } from 'react-router-dom';
 // import styled from 'styled-components';
 // import { useGlobalContext } from '../context';
 
@@ -8,29 +9,43 @@ function Dashboard() {
     // const { user } = useGlobalContext();
     // console.log('from dashboard global user: ', user);
     const { auth } = useAuth();
-    const { user_name, user_userID, user_roles } = auth.user;
+    // console.log(auth);
+    // const { user_name, user_id, user_roles } = auth?.user;
 
     return (
         <>
-            <div role='main'>
-                <div className='text-color-success text-capitalize'>
-                    <h2>
-                        hello there <span>{user_name}</span>
-                    </h2>
-                    <p>
-                        Your ID: <span>{user_userID}</span>
-                    </p>
-                    <p>
-                        Your role: <span>{user_roles}</span>
-                    </p>
+            <div className=''>
+                <div className='text-[var(--text)]'>
+                    <h1> hello there {auth?.user && <span className='text-transparent bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text'>{auth.user.user_name}</span>}</h1>
                 </div>
-                <div className='p-5'>
-                    {/* <p>Links to :</p> */}
-                    <div className='px-5 text-capitalize link text-decoration-none'>
-                        {/* )} */}
+                <div className='my-5'>
+                    <h3>Welcome to <span className='text-[var(--text-accent)]' >Sangeet</span></h3>
+                    {!auth?.user && <h5>
+                        <Link className='underline mx-1 text-[var(--accent)]'
+                            to='/login'  >Login</Link> or
+                        <Link className='underline mx-1 text-[var(--accent)]'
+                            to='/register'  >Register</Link>
+                        to unlock more features</h5>
+                    }
+                </div>
+                <div className='mt-10'>
+                    <h4>Use these links to navigate the application</h4>
+                    <div className='flex flex-col space-y-2'>
+                        <Link
+                            className='underline underline-offset-2 hover:text-[var(--text-accent)]'
+                            to='/songs'
+                        >
+                            <h4>Songs</h4>
+                        </Link>
+                        <Link
+                            className='underline underline-offset-2 hover:text-[var(--text-accent)]'
+                            to='/artists'
+                        >
+                            <h4>Artists</h4>
+                        </Link>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

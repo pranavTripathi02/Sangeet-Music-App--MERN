@@ -14,6 +14,8 @@ const login = async (req, res) => {
         throw new BadRequestError('Please provide both email and password');
     }
 
+    // console.log("email, pass: ", email, password);
+
     const user = await User.findOne({ user_email: email });
     if (!user) {
         throw new BadRequestError('User does not exist');
@@ -39,19 +41,25 @@ const login = async (req, res) => {
     //     return;
     // }
     const refreshToken = crypto.randomBytes(20).toString('hex');
-    const userAgent = req.headers['user-agent'];
-    const ip = req.ip;
 
-    const userToken = { refreshToken, ip, userAgent, user: tokenUser };
+    // const userAgent = req.headers['user-agent'];
+    // const ip = req.ip;
+
+    // const userToken = { refreshToken, ip, userAgent, user: tokenUser };
     // const tokenCreated = await Token.create(userToken);
-    const { refreshTokenJWT } = attachCookies({ res, user: userToken });
+    const { accessTokenJWT, refreshTokenJWT } = attachCookies({
+        res,
+        user: tokenUser,
+        refreshToken
+    });
     user.user_refreshToken = refreshTokenJWT;
     await user.save();
 
-    res.status(StatusCodes.OK).json({ user: userToken });
+    res.status(StatusCodes.OK).json({ accessToken: accessTokenJWT, user: tokenUser });
 };
 
 const logout = async (req, res) => {
+    // console.log("logging out user");
     const { refreshToken } = req.signedCookies;
 
     res.cookie('accessToken', 'logout', {
@@ -63,12 +71,12 @@ const logout = async (req, res) => {
         expires: new Date(Date.now()),
     });
 
-    const foundUser = await User.findOne({ refreshToken });
+    const foundUser = await User.findOne({ user_refreshToken: refreshToken });
     if (!foundUser) {
         res.clearCookie('refreshToken', { httpOnly: true, secure: true });
         return res.sendStatus(StatusCodes.OK);
     }
-    foundUser.refreshToken = '';
+    foundUser.user_refreshToken = '';
     await foundUser.save();
 
     res.status(StatusCodes.OK).json({ msg: 'User logged out' });
@@ -81,7 +89,13 @@ const register = async (req, res) => {
         throw new BadRequestError('Email already registered');
     }
     const isFirstAccount = (await User.countDocuments({})) === 0;
-    const role = isFirstAccount ? 'admin' : 'user';
+    let roles = {};
+    if (req.body.roles) {
+        roles = req.body.roles;
+    }
+    if (isFirstAccount) {
+        roles = { Admin: 'admin', ...roles };
+    }
 
     try {
         const salt = await bcrypt.genSalt(10);
@@ -90,7 +104,7 @@ const register = async (req, res) => {
             user_name: name,
             user_email: email,
             user_password: hashedPass,
-            user_roles: role,
+            user_roles: roles,
         });
         res.status(StatusCodes.CREATED).
             json({

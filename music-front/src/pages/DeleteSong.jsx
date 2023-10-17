@@ -1,7 +1,6 @@
 import axios from '../api/axios';
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import FormRow from '../components/FormRow';
 import useLocalState from '../utils/localState';
 
 export default function DeleteSong() {
@@ -53,18 +52,18 @@ export default function DeleteSong() {
                 </p>
                 <form action='' className='form' onSubmit={handleSubmit}>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='title'
                             type='title'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.title}
                         />
                     </div>
                     <div className='mb-3'>
-                        <FormRow
+                        <input
                             name='artist'
                             type='artist'
-                            handleChange={handleChange}
+                            onChange={handleChange}
                             value={values.artist}
                         />
                     </div>
